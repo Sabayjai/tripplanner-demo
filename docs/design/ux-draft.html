@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft UX/UI - Trip Planner ครอบครัว (R002)</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Thonburi,Sarabun,sans-serif;background:#f6f4ef;color:#222;line-height:1.5}
+.top{position:sticky;top:0;background:#0b6bcb;color:#fff;padding:10px 14px;font-size:15px}
+.top b{font-size:17px}
+.wrap{max-width:520px;margin:0 auto;padding:12px 12px 40px}
+.nav{display:flex;gap:6px;overflow:auto;margin:10px 0;position:sticky;top:48px;background:#f6f4ef;padding:6px 0}
+.nav a{flex:1;min-width:90px;text-align:center;background:#fff;border:2px solid #0b6bcb;color:#0b6bcb;border-radius:10px;padding:8px 6px;text-decoration:none;font-size:14px}
+.screen{background:#fff;border-radius:14px;padding:14px;margin:14px 0;border:1px solid #e5ddcf}
+.screen h2{margin:0 0 4px;font-size:19px}
+.hint{color:#666;font-size:13px;margin:0 0 10px}
+.card{border:2px solid #ddd;border-radius:12px;padding:10px;margin:8px 0}
+.card.pick{border-color:#0b6bcb;background:#e8f1ff}
+.row{display:flex;justify-content:space-between;padding:4px 0;font-size:15px}
+.total{font-size:18px;font-weight:700}
+.big{font-size:28px;font-weight:800;color:#0b6bcb;text-align:center;margin:6px 0}
+input,select{width:100%;font-size:16px;padding:10px;border-radius:10px;border:1px solid #ccc;margin:4px 0}
+label{font-size:14px;color:#444}
+.btn{display:block;width:100%;font-size:17px;padding:12px;border-radius:12px;border:0;background:#0b6bcb;color:#fff;margin:8px 0}
+.btn2{background:#fff;color:#0b6bcb;border:2px solid #0b6bcb}
+.tag{display:inline-block;font-size:12px;background:#eee;border-radius:20px;padding:2px 10px;margin:2px 4px 2px 0}
+.lock{background:#fff7d6;border:1px dashed #a80;padding:8px;border-radius:10px;font-size:14px}
+@media(min-width:800px){.wrap{max-width:900px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}}
+</style>
+</head>
+<body>
+<div class="top">ทริปชะอำ : เดินทาง 1,700 + ที่พัก 4,000 + กิจกรรม 800 + กิน 0 = <b>รวม 6,500</b></div>
+<div class="wrap">
+<div class="nav"><a href="#s1">1 ลิสต์ทริป</a><a href="#s2">2 Candidate</a><a href="#s3">3 รายละเอียด</a><a href="#s4">4 งบ+จริง</a><a href="#s5">5 สรุป</a></div>
+
+<div id="s1" class="screen"><h2>1) ลิสต์ทริป</h2><p class="hint">US-001 สร้างหลายทริป + ปุ่มคัดลอกข้ามทริป</p>
+<div class="card"><b>ชะอำ 2 คืน</b> <span class="tag">วางแผน</span><div>12–14 ต.ค. • ผู้ใหญ่ 2 เด็ก 1</div><button class="btn2 btn">เปิด</button></div>
+<div class="card"><b>เขาใหญ่ 2 คืน</b> <span class="tag">ร่าง</span><div>คัดลอกจากทริปชะอำมา</div><button class="btn2 btn">เปิด</button></div>
+<button class="btn">+ เพิ่มทริป / คัดลอกทริปเก่า</button>
+</div>
+
+<div id="s2" class="screen"><h2>2) Candidate (ร่างคุยรอบแรก)</h2><p class="hint">US-002 เพิ่มได้ไม่จำกัด ติ๊ก 1+ แผนไปลงละเอียด | มือถือ = การ์ดแนวตั้ง จอใหญ่ = 3 คอลัมน์</p>
+<div class="grid3">
+<div class="card pick"><b>A ทะเล 2 คืน ★เลือกแล้ว</b><div>ชะอำ 10,000–12,000</div><div>ข้อดี: ลูกเล่นน้ำเยอะ</div><span class="tag">ปลายทาง</span><span class="tag">2 คืน</span></div>
+<div class="card pick"><b>B เขาใกล้บ้าน 2 คืน ★เลือกแล้ว</b><div>เขาใหญ่ 7,000–9,000</div><div>ข้อดี: เดินทางสั้น</div></div>
+<div class="card"><b>C เมือง+สวนสนุก 1 คืน</b><div>6,000–8,000</div><div>ข้อดี: งบน้อยสุด</div></div>
+</div>
+<button class="btn">+ เพิ่ม Candidate</button>
+</div>
+
+<div id="s3" class="screen"><h2>3) รายละเอียดแผนที่เลือก</h2><p class="hint">US-003/004/005 กรอกเฉพาะแผนที่ติ๊ก ข้ามได้ ไม่บังคับ</p>
+<label>เดินทาง - รถ</label><input value="รถยนต์ส่วนตัว" readonly>
+<label>ค่าน้ำมัน (คาดการณ์)</label><input value="1,500" readonly>
+<label>ทางด่วน</label><input value="200" readonly>
+<label>จุดแวะ 1-2</label><input value="ปั๊ม PT + ร้านข้าวแกง" readonly>
+<label>ที่พัก - ชื่อ</label><input value="บ้านพักชะอำ" readonly>
+<div class="row"><span>2,000 x 2 คืน</span><b>= 4,000 อัตโนมัติ</b></div>
+<label>กิจกรรม</label>
+<div class="card">เล่นน้ำชายหาด <span class="tag">ใกล้ที่พัก</span> <span class="tag">พ่อบันทึก • น้องเสนอ</span><div>ค่าเข้า 200 x 3 = 600</div></div>
+<div class="card">ตลาดน้ำ <span class="tag">ระหว่างทาง</span><div>ค่าเข้า 50 x 4 = 200</div></div>
+<button class="btn2 btn">ดึงจากทริปเก่า / คัดลอกจากอีกแผน</button>
+</div>
+
+<div id="s4" class="screen"><h2>4) งบ 4 หมวด + จดจริง</h2><p class="hint">US-006/007/008 ชุดแผน (ล็อกหลัง Finalize) แยกกับชุดจริง (จดได้ตลอด)</p>
+<div class="row"><span>เดินทาง (แผน)</span><b>1,700</b></div>
+<div class="row"><span>ที่พัก (แผน)</span><b>4,000</b></div>
+<div class="row"><span>กิน (แผน)</span><b>0 ว่างได้</b></div>
+<div class="row"><span>กิจกรรม (แผน)</span><b>800</b></div>
+<div class="row total"><span>รวมแผน</span><span>6,500</span></div>
+<div class="lock">กด Finalize แล้วล็อกแผน+งบชุดนี้ แก้ต้องปลดล็อกก่อน ส่วนช่องจริงยังจดได้</div>
+<button class="btn">Finalize แผน A</button>
+<label>จดจริง - เดินทาง</label><input placeholder="เช่น 1,700">
+<label>จดจริง - กิน</label><input placeholder="เช่น 1,800">
+<div class="row"><span>เหลือ/เกิน</span><b>-200 เกินนิดหน่อย</b></div>
+</div>
+
+<div id="s5" class="screen"><h2>5) สรุป 1 หน้าขออนุมัติ</h2><p class="hint">US-009 ยื่นมือถือให้ภรรยาดูจบในจอเดียว</p>
+<div class="big">ขอเบิก 8,500 บาท</div>
+<div style="text-align:center">ภาษาไทยล้วน ตัวเลขบาทชัด</div>
+<div class="card pick"><b>เลือกแล้ว: A ทะเล ชะอำ 2 คืน</b><div>เดินทาง 1,700 + ที่พัก 4,000 + กิน 2,000 + กิจกรรม 800 = 8,500</div></div>
+<div class="card"><b>A</b> 10,000–12,000 | <b>B</b> 7,000–9,000 | <b>C</b> 6,000–8,000</div>
+<div class="hint">ไม่มีปุ่มแชร์/export ตาม requirement ดูบนเครื่องพ่อพอ</div>
+</div>
+
+</div>
+</body>
+</html>

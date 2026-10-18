@@ -1,0 +1,32 @@
+# Freebuff agent workspace (secrets / local state)
+.freebuff/
+
+# Dependencies
+node_modules/
+app/node_modules/
+
+# Build output (สร้างใหม่ด้วย npm run build ได้เสมอ)
+dist/
+app/dist/
+
+# Logs & temp
+*.log
+*.tmp
+preview-*.log
+
+# Env & secrets (ห้าม commit เด็ดขาด)
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

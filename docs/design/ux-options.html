@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตัวเลือกหน้าจอ 3 แบบ — Trip Planner ครอบครัว</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Thonburi,Sarabun,sans-serif;background:#f6f4ef;color:#222;line-height:1.6;font-size:17px}
+.wrap{max-width:560px;margin:0 auto;padding:12px 12px 60px}
+h1{font-size:22px;text-align:center}
+.opt{background:#fff;border:3px solid #0b6bcb;border-radius:16px;padding:14px;margin:16px 0}
+.opt h2{margin:0 0 6px;font-size:20px;color:#0b6bcb}
+.tag{display:inline-block;font-size:13px;background:#e8f1ff;color:#0b6bcb;border-radius:20px;padding:2px 12px;margin:2px 4px 2px 0;font-weight:700}
+.mock{background:#f6f4ef;border:1px dashed #aaa;border-radius:12px;padding:10px;margin:10px 0;font-size:15px}
+.bar{background:#0b6bcb;color:#fff;border-radius:8px;padding:8px;text-align:center;font-weight:700;margin:4px 0}
+.rowbtn{display:flex;gap:6px;margin:4px 0}
+.rowbtn span{flex:1;background:#fff;border:2px solid #0b6bcb;color:#0b6bcb;border-radius:8px;padding:8px 2px;text-align:center;font-size:13px}
+.rowbtn span.on{background:#0b6bcb;color:#fff}
+.card{background:#fff;border:2px solid #ddd;border-radius:10px;padding:8px;margin:6px 0}
+.pros{font-size:15px;margin:6px 0}
+.btn{display:block;width:100%;font-size:17px;padding:12px;border-radius:12px;border:0;background:#0b6bcb;color:#fff;margin:6px 0;text-align:center}
+.back{font-size:20px;font-weight:800}
+.steps{display:flex;gap:4px;margin:6px 0}
+.steps span{flex:1;height:8px;border-radius:4px;background:#ddd}
+.steps span.done{background:#0b6bcb}
+@media(min-width:800px){.wrap{max-width:920px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>เลือกหน้าจอแบบที่พ่อเข้าใจสุด</h1>
+<p style="text-align:center;color:#666">ข้อมูลตัวอย่างชุดเดียวกัน (ทริปชะอำ) แค่จัดวางต่างกัน — ชอบแบบไหนบอกผม</p>
+
+<div class="opt">
+<h2>แบบ A · แท็บ 5 ปุ่ม (ที่ใช้อยู่ตอนนี้)</h2>
+<div><span class="tag">สลับหน้าไว</span><span class="tag">เห็นเมนูครบตลอด</span></div>
+<div class="mock">
+<div class="bar">ชะอำ 2 คืน · รวม 6,450</div>
+<div class="rowbtn"><span class="on">1 ลิสต์</span><span>2 Candidate</span><span>3 รายละเอียด</span><span>4 งบ</span><span>5 สรุป</span></div>
+<div class="card"><b>ชะอำ 2 คืน</b> [เปิด] [คัดลอก] [ลบ]</div>
+<div class="card"><b>เขาใหญ่ 2 คืน</b> [เปิด] [คัดลอก] [ลบ]</div>
+</div>
+<p class="pros">✅ กดกระโดดไปหน้าไหนก็ได้ ไม่ต้องเรียงลำดับ<br>⚠️ ต้องจำว่าตัวเองอยู่ทริปไหน (มีชื่อบนแถบน้ำเงินช่วย)</p>
+</div>
+
+<div class="opt">
+<h2>แบบ B · หน้ายาวหน้าเดียว (เลื่อนลงอย่างเดียว)</h2>
+<div><span class="tag">ไม่ต้องจำเมนู</span><span class="tag">เหมือนอ่านไลน์ยาวๆ</span></div>
+<div class="mock">
+<div class="bar">ชะอำ 2 คืน · รวม 6,450</div>
+<div class="card"><b>☰ ทริปของฉัน</b><br>ชะอำ 2 คืน · เขาใหญ่ 2 คืน · [+เพิ่ม]</div>
+<div class="card"><b>☰ ตัวเลือก A/B/C</b><br>ทะเล ★ · เขา ★ · สวนสนุก</div>
+<div class="card"><b>☰ รายละเอียด</b><br>น้ำมัน 1,500 · ที่พัก 4,000 · เล่นน้ำ</div>
+<div class="card"><b>☰ งบ + สรุป</b><br>ยอดขอเบิก 8,500</div>
+</div>
+<p class="pros">✅ เปิดมาเจอทุกอย่าง ไม่ต้องกดเมนูเลย เลื่อนอย่างเดียว<br>⚠️ หน้ายาว ต้องเลื่อนเยอะเวลาจะแก้ของข้างบน</p>
+</div>
+
+<div class="opt">
+<h2>แบบ C · ทีละขั้น (มีปุ่ม กลับ / ต่อไป)</h2>
+<div><span class="tag">พาทำทีละขั้น</span><span class="tag">ไม่หลง</span></div>
+<div class="mock">
+<div class="steps"><span class="done"></span><span class="done"></span><span></span><span></span><span></span></div>
+<div class="bar">ขั้น 2/5 · เลือกตัวเลือก</div>
+<div class="card"><b>A ทะเล 2 คืน</b> 10,000–12,000 [★เลือก]</div>
+<div class="card"><b>B เขาใหญ่ 2 คืน</b> 7,000–9,000 [★เลือก]</div>
+<div class="rowbtn"><span class="back">← กลับ</span><span class="on">ต่อไป →</span></div>
+</div>
+<p class="pros">✅ เหมือนมีคนจูงมือ ไม่ต้องคิดว่าจะกดอะไรต่อ<br>⚠️ อยากกระโดดข้ามขั้นไม่ได้ ต้องกดต่อไปเรื่อยๆ</p>
+</div>
+
+</div>
+</body>
+</html>
