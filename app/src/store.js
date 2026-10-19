@@ -106,7 +106,7 @@ function seed() {
   const t1 = uid()
   const cA = uid(), cB = uid(), cC = uid()
   return [migrateTrip({
-    id: t1, name: 'ชะอำ 2 คืน', dateRange: '12–14 ต.ค.', adults: 2, kids: 1,
+    id: t1, name: '🧪 ทริปตัวอย่าง · เที่ยววันหยุด 2 คืน', dateRange: '12–14 ต.ค.', adults: 2, kids: 1,
     status: 'ทำอยู่', departed: true, closed: false, lesson: '',
     approvedId: cA, locked: true, approvedTotal: '6450',
     candidates: [
