@@ -1,4 +1,5 @@
 import { num, fmt, mkItem, planTotals, peopleOf } from '../store.js'
+import { ask } from '../modal.js'
 
 // ใบรายละเอียด (J3) — โครงเดียวกับจดเงินจริงเป๊ะ: ทุกหมวด = การ์ดหัวข้อยอดรวม + แถวรายการ + ฟอร์ม +เพิ่มรายการ พับไว้
 export function renderDetail(el, ctx) {
@@ -86,11 +87,16 @@ export function renderDetail(el, ctx) {
       if (!v) return
       c.stops.push(v); ctx.refresh()
     }
-    el.querySelectorAll('[data-delstop]').forEach((b) => b.onclick = () => {
-      c.stops.splice(Number(b.dataset.delstop), 1); ctx.refresh()
+    el.querySelectorAll('[data-delstop]').forEach((b) => b.onclick = async () => {
+      const i = Number(b.dataset.delstop)
+      if (!(await ask({ mood: '📍', title: `ลบจุดแวะ “${c.stops[i] || ''}”?`, ok: 'ลบเลย' }))) return
+      c.stops.splice(i, 1); ctx.refresh()
     })
-    el.querySelectorAll('[data-del]').forEach((b) => b.onclick = () => {
+    el.querySelectorAll('[data-del]').forEach((b) => b.onclick = async () => {
       const [k, id] = b.dataset.del.split(':')
+      const it = (c.plan[k] || []).find((x) => x.id === id)
+      if (!it) return
+      if (!(await ask({ mood: '🗑️', title: `ลบ “${it.title || 'รายการนี้'}”?`, message: `ยอด ${fmt(num(it.amount))} จะหายจากใบนี้`, ok: 'ลบเลย', danger: true }))) return
       c.plan[k] = c.plan[k].filter((x) => x.id !== id)
       ctx.refresh()
     })
@@ -128,8 +134,6 @@ export function renderDetail(el, ctx) {
         c.plan[k].push(mkItem({ title: gv('title'), amount: gv('amount'), note: gv('note') }))
       }
       ctx.refresh()
-      const dd = el.querySelector(`#df-${k}`)
-      if (dd) dd.open = true
     })
   }
 }

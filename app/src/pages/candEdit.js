@@ -1,3 +1,5 @@
+import { ask } from '../modal.js'
+
 // แก้ข้อมูลใบ (หัวใบเทียบ) — ฟอร์มจริง ทุกช่องว่างได้
 export function renderCandEdit(el, ctx) {
   const t = ctx.activeTrip()
@@ -20,8 +22,8 @@ export function renderCandEdit(el, ctx) {
     ctx.go({ name: 'compare', tripId: t.id })
   }
   const del = el.querySelector('#del')
-  if (del) del.onclick = () => {
-    if (!confirm(`ลบใบ “${c.dest || 'ใบนี้'}” พร้อมยอดที่กรอก?`)) return
+  if (del) del.onclick = async () => {
+    if (!(await ask({ mood: '🗑️', title: `ลบใบ “${c.dest || 'ใบนี้'}”?`, message: 'ยอดที่กรอกไว้ในใบนี้จะหายหมดนะ', ok: 'ลบเลย', danger: true }))) return
     t.candidates = t.candidates.filter((x) => x.id !== c.id)
     if (t.approvedId === c.id) { t.approvedId = ''; t.locked = false; t.approvedTotal = ''; t.departed = false }
     ctx.persist()

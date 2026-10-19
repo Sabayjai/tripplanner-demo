@@ -3,20 +3,25 @@ import { uid, tripStatus } from '../store.js'
 // ระดับ 1 · ทริปของฉัน (J1) — เข้าแอปเจอจอนี้เสมอ การ์ดมีแค่ป้ายสถานะ ไม่มีแถบขั้นบนการ์ด ไม่มีการกรอกบนการ์ด
 export function renderTrips(el, ctx) {
   const { trips } = ctx
-  el.innerHTML = `
-    <div class="screen"><h2>ทริปของฉัน</h2>
-    <p class="hint">เข้าแอปมาเจอจอนี้เสมอ • ป้ายบอกว่าทริปไหนค้างขั้นไหน • แตะ ▶ ทำต่อ วิ่งไปถูกขั้นทันที</p>
-    ${trips.map((t) => {
-      const n = (t.candidates || []).length
-      return `
+  const isDone = (t) => t.closed || t.status === 'สรุปแล้ว'
+  const active = trips.filter((t) => !isDone(t))
+  const done = trips.filter(isDone)
+  const card = (t) => {
+    const n = (t.candidates || []).length
+    return `
       <div class="card tap" data-trip="${t.id}">
         <b>${esc(t.name) || '(ทริปใหม่)'}</b> <span class="tag">${esc(tripStatus(t))}</span>
         <div>${esc(t.dateRange) || 'ยังไม่ใส่วันที่'} • ผู้ใหญ่ ${esc(t.adults) || '—'} เด็ก ${esc(t.kids) || '—'}</div>
         <div class="small">${n ? `${n} ตัวเลือก` : 'ยังไม่มีตัวเลือก'}</div>
         <div class="btn-row"><button class="btn" data-go="${t.id}">▶ ทำต่อ</button><button class="btn btn2" data-edit="${t.id}">✏️ แก้</button></div>
       </div>`
-    }).join('') || '<p class="hint">ยังไม่มีทริป กดปุ่มข้างล่างเพิ่มได้เลย</p>'}
+  }
+  el.innerHTML = `
+    <div class="screen"><h2>ทริปของฉัน</h2>
+    <p class="hint">เข้าแอปมาเจอจอนี้เสมอ • ป้ายบอกว่าทริปไหนค้างขั้นไหน • แตะ ▶ ทำต่อ วิ่งไปถูกขั้นทันที</p>
+    ${active.map(card).join('') || (done.length ? '<p class="hint">ไม่มีทริปที่กำลังทำ ทริปที่จบแล้วอยู่ด้านล่าง</p>' : '<p class="hint">ยังไม่มีทริป กดปุ่มข้างล่างเพิ่มได้เลย</p>')}
     <button class="btn btn2" id="addTrip">+ เพิ่มทริป</button>
+    ${done.length ? `<details class="donebox"><summary>📦 ทริปที่จบแล้ว (${done.length}) — แตะเพื่อดู</summary>${done.map(card).join('')}</details>` : ''}
     </div>`
 
   el.querySelector('#addTrip').onclick = () => {

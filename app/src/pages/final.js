@@ -1,4 +1,5 @@
-import { fmt, planTotals, actualTotals, winnerOf, CATS } from '../store.js'
+import { fmt, num, planTotals, actualTotals, winnerOf, CATS } from '../store.js'
+import { ask } from '../modal.js'
 
 // สรุปจบทริป (J6-หลังกลับ) — อ่านอย่างเดียว เก็บเป็นบทเรียน
 export function renderFinal(el, ctx) {
@@ -20,7 +21,7 @@ export function renderFinal(el, ctx) {
     <div class="row"><span>จ่ายจริง</span><b>${fmt(a.total)}</b></div>
     <div class="row" style="font-weight:700"><span>${total > 0 ? 'เกินงบ' : total < 0 ? 'เหลือ' : 'พอดีงบ'}</span><span>${total === 0 ? '—' : fmt(Math.abs(total))}</span></div>
     <hr>
-    ${CATS.map(([k, label]) => `<div class="row"><span>${label}</span><span>แผน ${fmt(p[k])} • จริง ${fmt(a[k])}</span></div>`).join('')}
+    ${CATS.map(([k, label]) => `<details class="card fincat"><summary><b>${label}</b><span class="small">แผน ${fmt(p[k])} • จริง ${fmt(a[k])} ›</span></summary>${actualRows(w, k)}</details>`).join('')}
     <hr>
     <label>บทเรียนทริปหน้า (จำไว้เอง)</label>
     <textarea id="lesson" placeholder="เช่น กันงบกินเพิ่มอีกนิด">${esc(t.lesson)}</textarea>
@@ -34,14 +35,30 @@ export function renderFinal(el, ctx) {
     sb.textContent = 'บันทึกแล้ว ✓'
     setTimeout(() => { sb.textContent = 'บันทึกบทเรียน' }, 1500)
   }
-  el.querySelector('#reopen').onclick = () => {
-    if (!confirm('เปิดทริปอีกครั้ง? (กลับไปขั้นจดเงินจริง)')) return
+  el.querySelector('#reopen').onclick = async () => {
+    if (!(await ask({ mood: '🔄', title: 'เปิดทริปอีกครั้ง?', message: 'กลับไปขั้นจดเงินจริง', ok: 'เปิดเลย' }))) return
     t.closed = false
-    if (t.status === 'สรุปแล้ว') t.status = 'กำลังวางแผน'
+    if (t.status === 'สรุปแล้ว') t.status = 'ทำอยู่'
     ctx.persist()
     ctx.go({ name: 'actual', tripId: t.id })
   }
   el.querySelector('#home').onclick = () => ctx.go({ name: 'trips' })
 }
+
+// อ่านอย่างเดียว: รายการที่จดจริงแยกหมวด เรียงตามวัน (เหมือนหน้าจดจริงแต่ไม่มีปุ่มลบ)
+function actualRows(w, k) {
+  const items = [...(w.actual?.[k] || [])].sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'))
+  if (!items.length) return '<p class="small">หมวดนี้ยังไม่จดรายการ</p>'
+  let lastDay = ''
+  return items.map((it) => {
+    const day = it.date ? fmtDate(it.date) : 'ไม่ระบุวัน'
+    const head = day !== lastDay ? `<div class="dayhead">📅 ${esc(day)}</div>` : ''
+    lastDay = day
+    return `${head}<div class="row"><span class="grow">${esc(it.title) || '(ไม่มีหัวข้อ)'}${it.note ? ` <span class="tag">${esc(it.note)}</span>` : ''}</span><b>${fmt(num(it.amount))}</b></div>`
+  }).join('')
+}
+
+const THM = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+const fmtDate = (iso) => { const pa = String(iso || '').split('-'); return pa.length === 3 ? `${+pa[2]} ${THM[+pa[1] - 1] || ''}` : iso }
 
 const esc = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')

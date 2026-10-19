@@ -71,8 +71,8 @@ function migrateCandidate(c, trip) {
 function migrateTrip(t) {
   t.id = t.id || uid()
   t.candidates = asList(t.candidates).map((c) => migrateCandidate(c, t))
-  if (t.status === 'วางแผน') t.status = 'กำลังวางแผน'
-  if (!t.status) t.status = 'ร่าง'
+  if (['วางแผน', 'กำลังวางแผน', 'ร่าง'].includes(t.status)) t.status = 'ทำอยู่'
+  if (!t.status) t.status = 'ทำอยู่'
   // finalize เดิม → ใบตัวจริง + ล็อก
   const finId = t.finalize?.candidateId
   const w = t.candidates.find((c) => c.id === finId) || t.candidates.find((c) => c.winner)
@@ -107,7 +107,7 @@ function seed() {
   const cA = uid(), cB = uid(), cC = uid()
   return [migrateTrip({
     id: t1, name: 'ชะอำ 2 คืน', dateRange: '12–14 ต.ค.', adults: 2, kids: 1,
-    status: 'กำลังวางแผน', departed: true, closed: false, lesson: '',
+    status: 'ทำอยู่', departed: true, closed: false, lesson: '',
     approvedId: cA, locked: true, approvedTotal: '6450',
     candidates: [
       {
@@ -201,17 +201,12 @@ export const winnerOf = (t) =>
 
 export const pickedOf = (t) => (t?.candidates || []).filter((c) => c.picked)
 
-// ---- สถานะทริป (ดูจากข้อมูล ไม่ต้องจำ) ----
+// ---- สถานะทริป เหลือ 3 อย่างพอ (R024: ทำอยู่ / รอเที่ยว / จบแล้ว) ----
 export function tripStatus(t) {
-  if (!t) return 'ร่าง'
-  if (t.closed || t.status === 'สรุปแล้ว') return 'สรุปแล้ว'
-  const w = winnerOf(t)
-  if (w && t.departed) return 'กำลังเที่ยว · จดเงินจริง'
-  if (w) return 'เคาะแล้ว · รอเดินทาง'
-  const picked = pickedOf(t)
-  if (picked.some(hasDetail)) return 'กำลังลงละเอียด'
-  if ((t.candidates || []).length) return 'คุยตัวเลือก'
-  return 'ร่าง'
+  if (!t) return 'ทำอยู่'
+  if (t.closed || t.status === 'สรุปแล้ว') return 'จบแล้ว'
+  if (winnerOf(t)) return 'รอเที่ยว'
+  return 'ทำอยู่'
 }
 
 // เปิดทริปแล้วต้องไปจอไหน (ทางไปแค่ 3 ทาง — เคาะแล้วถือว่าอนุมัติทันที ไปจดเงินจริงได้เลย)
@@ -228,7 +223,7 @@ export function copyTrip(trip) {
   const reid = (items) => asList(items).forEach((it) => { it.id = uid() })
   c.id = uid()
   c.name = (c.name || 'ทริป') + ' (สำเนา)'
-  c.status = 'ร่าง'
+  c.status = 'ทำอยู่'
   c.approvedId = ''
   c.locked = false
   c.approvedTotal = ''

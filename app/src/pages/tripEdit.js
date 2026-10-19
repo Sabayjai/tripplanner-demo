@@ -1,3 +1,5 @@
+import { ask } from '../modal.js'
+
 // แก้ข้อมูลทริป — ฟอร์มจริง (บันทึกได้) ทุกช่องว่างได้
 export function renderTripEdit(el, ctx) {
   const { trips } = ctx
@@ -11,22 +13,26 @@ export function renderTripEdit(el, ctx) {
     <div class="frow"><div><label>ผู้ใหญ่</label><input id="f-ad" inputmode="numeric" value="${esc(t.adults)}" placeholder="เช่น 2"></div>
     <div><label>เด็ก</label><input id="f-kid" inputmode="numeric" value="${esc(t.kids)}" placeholder="เช่น 1"></div></div>
     <label>สถานะ</label><select id="f-st">
-      ${['ร่าง', 'กำลังวางแผน', 'สรุปแล้ว'].map((s) => `<option ${t.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+      ${['ทำอยู่', 'จบแล้ว'].map((s) => `<option ${((t.closed || t.status === 'สรุปแล้ว') ? 'จบแล้ว' : 'ทำอยู่') === s ? 'selected' : ''}>${s}</option>`).join('')}
     </select>
     <button class="btn" id="save">บันทึก → กลับทริปของฉัน</button>
     ${ctx.view.isNew ? '' : `<button class="btn btnDanger" id="del">ลบทริปนี้</button>`}
     </div>`
   const v = (id) => el.querySelector(id).value.trim()
-  el.querySelector('#save').onclick = () => {
+  el.querySelector('#save').onclick = async () => {
+    const st = el.querySelector('#f-st').value
+    if (st === 'จบแล้ว' && !t.closed) {
+      if (!(await ask({ mood: '🎉', title: 'สรุปทริปนี้เลย?', message: 'ทริปจะย้ายไปขั้นสรุปจบทริปนะ', ok: 'สรุปเลย' }))) return
+    }
     t.name = v('#f-name'); t.dateRange = v('#f-date'); t.adults = v('#f-ad'); t.kids = v('#f-kid')
-    t.status = el.querySelector('#f-st').value
-    t.closed = t.status === 'สรุปแล้ว'
+    t.status = st === 'จบแล้ว' ? 'สรุปแล้ว' : 'ทำอยู่'
+    t.closed = st === 'จบแล้ว'
     ctx.persist()
     ctx.go({ name: 'trips' })
   }
   const del = el.querySelector('#del')
-  if (del) del.onclick = () => {
-    if (!confirm(`ลบทริป “${t.name || 'ทริปใหม่'}” พร้อมใบทั้งหมด?`)) return
+  if (del) del.onclick = async () => {
+    if (!(await ask({ mood: '🗑️', title: `ลบทริป “${t.name || 'ทริปใหม่'}”?`, message: 'ใบทั้งหมดในทริปนี้จะหายไปด้วยนะ', ok: 'ลบเลย', danger: true }))) return
     const i = trips.findIndex((x) => x.id === t.id)
     if (i >= 0) trips.splice(i, 1)
     ctx.persist()

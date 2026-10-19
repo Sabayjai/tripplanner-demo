@@ -104,6 +104,18 @@ function rerender() {
   else renderTrips(app, ctx)
 }
 
+// R024 ข้อ 3: พิมพ์ 1500 แล้วเห็น 1,500 ทันที ลดนับศูนย์ผิด
+// num() รับ comma อยู่แล้วเลยแค่จัดรูปตอนพิมพ์ ไม่ต้องแตะที่เก็บข้อมูล
+document.addEventListener('input', (e) => {
+  const el = e.target
+  if (!(el instanceof HTMLInputElement)) return
+  if (el.type === 'date' || el.inputMode !== 'numeric') return
+  const raw = el.value.replace(/[, ]/g, '')
+  if (!raw || !/^\d+$/.test(raw)) return
+  const grouped = Number(raw).toLocaleString('en-US')
+  if (grouped !== el.value) el.value = grouped
+})
+
 function esc(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;') }
 
 rerender()
